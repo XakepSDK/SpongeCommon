@@ -105,8 +105,8 @@ public abstract class MixinContainerRepair extends MixinContainer implements Len
         }
 
         this.outputSlot.setInventorySlotContents(0, ItemStackUtil.fromSnapshotToNative(event.getItem().getFinal()));
-        this.maximumCost = event.getLevelCost();
-        this.materialCost = event.getMaterialCost();
+        this.maximumCost = event.getCosts().getFinal().getLevelCost();
+        this.materialCost = event.getCosts().getFinal().getMaterialCost();
         this.listeners.forEach(l -> l.sendWindowProperty(((ContainerRepair)(Object) this), 0, this.maximumCost));
         this.detectAndSendChanges();
     }

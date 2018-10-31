@@ -122,6 +122,7 @@ import org.spongepowered.common.SpongeImplHooks;
 import org.spongepowered.common.block.BlockUtil;
 import org.spongepowered.common.entity.EntityUtil;
 import org.spongepowered.common.entity.PlayerTracker;
+import org.spongepowered.common.event.inventory.UpdateAnvilEventCost;
 import org.spongepowered.common.event.tracking.PhaseContext;
 import org.spongepowered.common.event.tracking.PhaseData;
 import org.spongepowered.common.event.tracking.PhaseTracker;
@@ -1410,8 +1411,9 @@ public class SpongeCommonEventFactory {
 
     public static UpdateAnvilEvent callUpdateAnvilEvent(ContainerRepair anvil, ItemStack slot1, ItemStack slot2, ItemStack result, String name, int levelCost, int materialCost) {
         Transaction<ItemStackSnapshot> transaction = new Transaction<>(ItemStackSnapshot.NONE, ItemStackUtil.snapshotOf(result));
+        UpdateAnvilEventCost costs = new UpdateAnvilEventCost(levelCost, materialCost);
         UpdateAnvilEvent event = SpongeEventFactory.createUpdateAnvilEvent(Sponge.getCauseStackManager().getCurrentCause(),
-                levelCost, levelCost, materialCost, materialCost, transaction, name, ItemStackUtil.snapshotOf(slot1), ItemStackUtil.snapshotOf(slot2), (Inventory)anvil);
+                new Transaction<>(costs, costs), transaction, name, ItemStackUtil.snapshotOf(slot1), ItemStackUtil.snapshotOf(slot2), (Inventory)anvil);
         SpongeImpl.postEvent(event);
         return event;
     }
